@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+todos = []
 
 @app.get("/", tags=["root"])
 async def read_root() -> dict:
@@ -34,17 +35,3 @@ async def add_todo(todo: dict) -> dict:
     return {
         "data": { "Todo added." }
     }
-
-
-todos = [
-{
-    "id": "1",
-    "item": "Read a book."
-},
-{
-    "id": "2",
-    "item": "Cycle around town."
-}
-]
-
-

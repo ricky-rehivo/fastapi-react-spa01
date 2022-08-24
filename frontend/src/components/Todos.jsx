@@ -36,9 +36,11 @@ export default function Todos() {
     <TodosContext.Provider value={{todos, fetchTodos}}>
       <AddTodo />
       <Stack spacing={5}>
-        {todos.map((todo) => (
-          <b>{todo.item}</b>
-        ))}
+        {
+          todos.map((todo) => (
+            <TodoHelper item={todo.item} id={todo.id} fetchTodos={fetchTodos} />
+          ))
+        }
       </Stack>
     </TodosContext.Provider>
   );
@@ -79,4 +81,85 @@ function AddTodo() {
       </InputGroup>
     </form>
   );
+}
+
+
+function UpdateTodo({item, id}) {
+  const {isOpen, onOpen, onClose} = useDisclosure();
+  const [todo, setTodo] = useState(item);
+  const {fetchTodos} = React.useContext(TodosContext);
+
+  const updateTodo = async () => {
+    await fetch(`http://localhost:8000/todo/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ item: todo })
+    });
+    onClose();
+    await fetchTodos();
+  };
+
+  return (
+    <>
+      <Button h="1.5rem" size="sm" onClick={onOpen}>Update Todo</Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay/>
+        <ModalContent>
+          <ModalHeader>Update Todo</ModalHeader>
+          <ModalCloseButton/>
+          <ModalBody>
+            <InputGroup size="md">
+              <Input
+                pr="4.5rem"
+                type="text"
+                placeholder="Add a todo item"
+                aria-label="Add a todo item"
+                value={todo}
+                onChange={event => setTodo(event.target.value)}
+              />
+            </InputGroup>
+          </ModalBody>
+  
+          <ModalFooter>
+            <Button h="1.5rem" size="sm" onClick={updateTodo}>Update Todo</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
+
+
+function TodoHelper({item, id, fetchTodos}) {
+  return (
+    <Box p={1} shadow="sm">
+      <Flex justify="space-between">
+        <Text mt={4} as="div">
+          {item}
+          <Flex align="end">
+            <UpdateTodo item={item} id={id} fetchTodos={fetchTodos}/>
+            <DeleteTodo id={id} fetchTodos={fetchTodos}/>
+          </Flex>
+        </Text>
+      </Flex>
+    </Box>
+  );
+}
+
+
+function DeleteTodo({id}) {
+  const {fetchTodos} = React.useContext(TodosContext)
+
+  const deleteTodo = async () => {
+    await fetch(`http://localhost:8000/todo/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: { "id": id }
+    })
+    await fetchTodos()
+  }
+
+  return (
+    <Button h="1.5rem" size="sm" onClick={deleteTodo}>Delete Todo</Button>
+  )
 }

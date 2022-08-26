@@ -1,7 +1,7 @@
 import React from "react";
 import { Heading, Flex, Divider } from "@chakra-ui/react";
 
-const Header = () => {
+const Header = (props) => {
   return (
     <Flex
       as="nav"
@@ -12,7 +12,7 @@ const Header = () => {
       bg="gray.400"
     >
       <Flex align="center" mr={5}>
-        <Heading as="h1" size="sm">Todos</Heading>
+        <Heading as="h1" size="sm">{props.title}</Heading>
         <Divider />
       </Flex>
     </Flex>

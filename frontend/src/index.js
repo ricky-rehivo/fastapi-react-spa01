@@ -18,12 +18,14 @@ function App() {
         <Tab>Calendar</Tab>
       </TabList>
 
+
       <TabPanel>
         <ChakraProvider>
           <Header title="List"/>
           <Todos />
         </ChakraProvider>
       </TabPanel>
+
       <TabPanel>
         <ChakraProvider>
           <Header title="Schedule" />

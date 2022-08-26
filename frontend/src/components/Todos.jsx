@@ -37,7 +37,7 @@ export default function Todos() {
       <AddTodo />
       <Stack spacing={5}>
         {
-          todos.map((todo) => (
+          todos?.map((todo) => (
             <TodoHelper item={todo.item} id={todo.id} fetchTodos={fetchTodos} />
           ))
         }

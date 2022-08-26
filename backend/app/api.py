@@ -26,7 +26,7 @@ async def read_root() -> dict:
 
 @app.get("/todo", tags=["todos"])
 async def get_todos() -> dict:
-    return { "data": todos }
+    return { "data_todos": todos }
 
 @app.post("/todo", tags=["todos"])
 async def add_todo(todo: dict) -> dict:
@@ -60,3 +60,5 @@ async def delete_todo(id: int) -> dict:
     return {
         "data": f"Todo with id {id} not found."
     }
+
+

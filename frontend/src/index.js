@@ -4,7 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import Header from "./components/Header";
 import Todos from "./components/Todos";
-import Calendar from "./components/Calendar"
+import Calendar from "./components/Calendar_deprecated"
 
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';

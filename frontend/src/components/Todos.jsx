@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
     Box,
     Button,
@@ -20,6 +21,7 @@ import {
 const TodosContext = React.createContext({
   todos: [], fetchTodos: () => {}
 });
+
 
 export default function Todos() {
   const [todos, setTodos] = useState([]);
@@ -48,7 +50,7 @@ export default function Todos() {
 
 
 function AddTodo() {
-  const [item, setItem] = React.useState("");
+  const [item, setItem] = useState("");
   const {todos, fetchTodos} = React.useContext(TodosContext);
 
   const handleInput = event => {
@@ -57,7 +59,7 @@ function AddTodo() {
 
   const handleSubmit = (event) => {
     const newTodo = {
-      "id": todos.length + 1,
+      "id": todos.length,
       "item": item
     };
     

@@ -58,7 +58,7 @@ export default function Calendar() {
     useEffect(() => {
         fetchEvents();
     }, [])
-    
+
     const handleSelect = (selectinfo) => {
         const start = new Date(selectinfo.start);
         const end = new Date(selectinfo.end);
@@ -78,58 +78,82 @@ export default function Calendar() {
         setInputStart(inputEvent.start);
         setInputEnd(inputEvent.end);
     };
-    
-    
-    return (
+
+    const titleElement = (
+        <>
+            <Text>タイトル</Text>
+            <InputGroup>
+                <Input
+                    type="text"
+                    value={inputTitle}
+                    name="inputTitle"
+                    onChange={event => setInputTitle(event.target.value)}
+                />
+            </InputGroup>
+        </>
+    )
+
+    const startTimeElement = (
+        <>
+            <InputGroup>
+                <Text>開始</Text>
+                <DatePicker
+                    locale='ja'
+                    dateFormat="yyyy/MM/d HH:mm"
+                    selected={inputStart}
+                    onChange={event => setInputStart(event)}
+                />
+            </InputGroup>
+        </>
+    )
+
+    const endTimeElement = (
+        <>
+        <InputGroup>
+            <Text>終了</Text>
+            <DatePicker
+                locale="ja"
+                dateFormat="yyyy/MM/d HH:mm"
+                selected={inputEnd}
+                onChange={event => setInputEnd(event)}
+            />
+        </InputGroup>
+        </>
+    )
+
+    const btnElement = (
+        <div>
+            This is the button.
+        </div>
+    )
+
+    const renderForm = (
         <>
             <Stack>
                 <Button h="1.5rem" size="sm" onClick={onOpen}>新規予定</Button>
             </Stack>
-            <Modal isOpen={onOpen} onClose={onClose}>
-            <ModalOverlay />
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>新規予定</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody>
-                        <Text>タイトル</Text>
-                        <InputGroup>
-                            <Input
-                                type="text"
-                                value={inputTitle}
-                                name="inputTitle"
-                                onChange={event => setInputTitle(event.target.value)}
-                            />
-                        </InputGroup>
-                        
-                        <InputGroup>
-                            <Text>開始</Text>
-                            <DatePicker
-                                locale='ja'
-                                dateFormat="yyyy/MM/d HH:mm"
-                                selected={inputStart}
-                                onChange={event => setInputStart(event)}
-                            />
-                        </InputGroup>
-
-                        <InputGroup>
-                            <Text>終了</Text>
-                            <DatePicker
-                                locale="ja"
-                                dateFormat="yyyy/MM/d HH:mm"
-                                selected={inputEnd}
-                                onChange={event => setInputEnd(event)}
-                            />
-                        </InputGroup>
-
-                        <div>
-                            This is the button.
-                        </div>
+                        {titleElement}
+                        {startTimeElement}
+                        {endTimeElement}
+                        {btnElement}
                     </ModalBody>
                     <ModalFooter>
 
                     </ModalFooter>
                 </ModalContent>`
             </Modal>
+        </>
+    );
+    
+    return (
+        <>
+            {renderForm}
             <FullCalendar
                 locale="ja" // 日本語
                 initialView="dayGridMonth" // 基本UI

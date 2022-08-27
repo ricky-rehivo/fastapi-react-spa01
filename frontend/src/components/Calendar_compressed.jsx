@@ -80,99 +80,56 @@ export default function Calendar() {
     };
     
     
-    const RenderForm = () => {
-        const RenderTitle = () => {
-            return (
-                <>
-                    <Text>タイトル</Text>
-                    <InputGroup>
-                        <Input
-                            type="text"
-                            value={inputTitle}
-                            name="inputTitle"
-                            onChange={event => setInputTitle(event.target.value)}
-                        />
-                    </InputGroup>
-                </>
-            );
-        }
-
-        const RenderStartTime = () => {
-            return (
-                <>
-                    <InputGroup>
-                        <Text>開始</Text>
-                        <DatePicker
-                            locale='ja'
-                            dateFormat="yyyy/MM/d HH:mm"
-                            selected={inputStart}
-                            onChange={event => setInputStart(event)}
-                        />
-                    </InputGroup>
-                </>
-            );
-        }
-
-        const RenderEndTime = () => {
-            return (
-                <>
-                    <InputGroup>
-                        <Text>終了</Text>
-                        <DatePicker
-                            locale="ja"
-                            dateFormat="yyyy/MM/d HH:mm"
-                            selected={inputEnd}
-                            onChange={event => setInputEnd(event)}
-                        />
-                    </InputGroup>
-                </>
-            );
-        };
-
-        const RenderBtn = () => {
-            return (
-                <div>
-                    This is the button.
-                </div>
-            );
-        };
-
-        return (
-            <>
-                <RenderTitle />
-                <RenderStartTime />
-                <RenderEndTime />
-                <RenderBtn />
-            </>
-        );
-    }
-
-    const AddEventBtn = () => {
-        return (
-            <>
-                <Stack>
-                    <Button h="1.5rem" size="sm" onClick={onOpen}>新規予定</Button>
-                </Stack>
-                <Modal isOpen={onOpen} onClose={onClose}>
-                <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>新規予定</ModalHeader>
-                        <ModalCloseButton/>
-                        <ModalBody>
-                            <RenderForm />
-                        </ModalBody>
-                        <ModalFooter>
-    
-                        </ModalFooter>
-                    </ModalContent>`
-                </Modal>
-            </>
-        );
-    };
-    
     return (
         <>
-            <AddEventBtn />
+            <Stack>
+                <Button h="1.5rem" size="sm" onClick={onOpen}>新規予定</Button>
+            </Stack>
+            <Modal isOpen={onOpen} onClose={onClose}>
+            <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>新規予定</ModalHeader>
+                    <ModalCloseButton/>
+                    <ModalBody>
+                        <Text>タイトル</Text>
+                        <InputGroup>
+                            <Input
+                                type="text"
+                                value={inputTitle}
+                                name="inputTitle"
+                                onChange={event => setInputTitle(event.target.value)}
+                            />
+                        </InputGroup>
+                        
+                        <InputGroup>
+                            <Text>開始</Text>
+                            <DatePicker
+                                locale='ja'
+                                dateFormat="yyyy/MM/d HH:mm"
+                                selected={inputStart}
+                                onChange={event => setInputStart(event)}
+                            />
+                        </InputGroup>
+
+                        <InputGroup>
+                            <Text>終了</Text>
+                            <DatePicker
+                                locale="ja"
+                                dateFormat="yyyy/MM/d HH:mm"
+                                selected={inputEnd}
+                                onChange={event => setInputEnd(event)}
+                            />
+                        </InputGroup>
+
+                        <div>
+                            This is the button.
+                        </div>
+                    </ModalBody>
+                    <ModalFooter>
+
+                    </ModalFooter>
+                </ModalContent>`
+            </Modal>
             <FullCalendar
                 locale="ja" // 日本語
                 initialView="dayGridMonth" // 基本UI

@@ -39,13 +39,18 @@ events: [], fetchEvents: () => {}
 });
 
 
+
+let numberDeletedEvents = 0;
+
 export default function Calendar() {
+    
     const [events, setEvents] = useState([]);
     const [eventId, setEventId] = useState("");
-    const [inputEvent, setInputEvent] = useState([]);
+    const [inputEvent, setInputEvent] = useState({});
     const [inputTitle, setInputTitle] = useState(""); // フォームに入力されたタイトル。
     const [inputStart, setInputStart] = useState(new Date); // イベントの開始時刻。
     const [inputEnd, setInputEnd] = useState(new Date); // イベントの終了時刻。
+    const [isUpdate, setIsUpdate] = useState(false);
 
     const {isOpen, onOpen, onClose} = useDisclosure()
 
@@ -72,12 +77,59 @@ export default function Calendar() {
 
 
     const handleClick = (info) => {
+
         setEventId(info.event.id);
-        setInputEvent(events[eventId]);
-        setInputTitle(inputEvent.title);
-        setInputStart(inputEvent.start);
-        setInputEnd(inputEvent.end);
+        setInputTitle(info.event.title);
+        setInputStart(info.event.start);
+        setInputEnd(info.event.end);
+        setIsUpdate(true);
+        onOpen();
     };
+
+    const addEvent = () => {
+        const newEvent = {
+            "id": events.length + numberDeletedEvents,
+            "title": inputTitle,
+            "start": inputStart,
+            "end": inputEnd
+        }
+        fetch("http://localhost:8000/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newEvent)
+        }).then(fetchEvents);
+        onClose();
+    }
+
+    const updateEvent = () => {
+        const newEvent = {
+            "id": eventId,
+            "title": inputTitle,
+            "start": inputStart,
+            "end": inputEnd
+        }
+
+        fetch(`http://localhost:8000/event/${eventId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newEvent)
+        }).then(fetchEvents);
+        onClose();
+        cancelRefresh();
+    }
+
+    const deleteEvent = () => {
+        fetch(`http://localhost:8000/event/${eventId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: { "id": eventId }
+        });
+        fetchEvents();
+        onClose();
+        cancelRefresh();
+        numberDeletedEvents++;
+    };
+
 
     const titleElement = (
         <>
@@ -121,27 +173,51 @@ export default function Calendar() {
         </>
     )
 
-    const btnElement = (
-        <div>
-            This is the button.
-        </div>
-    )
+    const cancelRefresh = () => {
+        console.log("cancelRefresh called!")
+        setInputTitle("");
+        setInputStart(new Date);
+        setInputEnd(new Date);
+        setIsUpdate(false)
+        onClose();
+    }
+
+    const BtnElement = () => {
+        if (isUpdate) {
+            return (
+                <>
+                <InputGroup>
+                    <Button h="1.5rem" size="sm" onClick={cancelRefresh}>キャンセル</Button>
+                    <Button h="1.5rem" size="sm" onClick={updateEvent}>更新</Button>
+                    <Button h="1.5rem" size="sm" onClick={deleteEvent}>削除</Button>
+                    </InputGroup>
+                </>
+        );} else {
+            return (
+                <>
+                    <Button h="1.5rem" size="sm" onClick={onClose}>キャンセル</Button>
+                    <Button h="1.5rem" size="sm" onClick={addEvent}>保存</Button>
+                </>
+            )
+        }
+    }
+
+
 
     const renderForm = (
         <>
             <Stack>
                 <Button h="1.5rem" size="sm" onClick={onOpen}>新規予定</Button>
             </Stack>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={cancelRefresh}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>新規予定</ModalHeader>
-                    <ModalCloseButton/>
                     <ModalBody>
                         {titleElement}
                         {startTimeElement}
                         {endTimeElement}
-                        {btnElement}
+                        <BtnElement />
                     </ModalBody>
                     <ModalFooter>
 
@@ -150,7 +226,7 @@ export default function Calendar() {
             </Modal>
         </>
     );
-    
+
     return (
         <>
             {renderForm}
@@ -178,9 +254,9 @@ export default function Calendar() {
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 //ref={ref}
                 weekends={true} // 週末表示
-                //events={events} // 起動時に登録するイベント
+                events={events} // 起動時に登録するイベント
                 select={handleSelect} // カレンダー範囲選択時
-                //eventClick={handleClick} // イベントクリック時
+                eventClick={handleClick} // イベントクリック時
             />
         </>
     )

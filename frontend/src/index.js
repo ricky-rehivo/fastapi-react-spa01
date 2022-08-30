@@ -1,14 +1,13 @@
 import React from "react";
-import { render } from 'react-dom';
+import { render } from "react-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import Header from "./components/Header";
 import Todos from "./components/Todos";
-import Calendar from "./components/Calendar_compressed"
+import Calendar from "./components/Calendar";
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 
 function App() {
   return (
@@ -18,10 +17,9 @@ function App() {
         <Tab>Calendar</Tab>
       </TabList>
 
-
       <TabPanel>
         <ChakraProvider>
-          <Header title="List"/>
+          <Header title="List" />
           <Todos />
         </ChakraProvider>
       </TabPanel>
@@ -33,8 +31,8 @@ function App() {
         </ChakraProvider>
       </TabPanel>
     </Tabs>
-  )
+  );
 }
 
-const rootElement = document.getElementById("root")
-render(<App />, rootElement)
+const rootElement = document.getElementById("root");
+render(<App />, rootElement);

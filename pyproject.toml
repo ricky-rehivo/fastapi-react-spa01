@@ -11,6 +11,9 @@ uvicorn = "^0.18.3"
 mypy = "^0.971"
 flake8 = "^5.0.4"
 black = "^22.6.0"
+mysql-connector = "^2.2.9"
+mysqlclient = "^2.1.1"
+SQLAlchemy = "^1.4.40"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

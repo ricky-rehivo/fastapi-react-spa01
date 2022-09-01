@@ -14,6 +14,8 @@ black = "^22.6.0"
 mysql-connector = "^2.2.9"
 mysqlclient = "^2.1.1"
 SQLAlchemy = "^1.4.40"
+PyMySQL = "^1.0.2"
+alembic = "^1.8.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
